@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.swp
+.DS_Store
+
+# Virtual Environment
+venv/
+.env
+*.env
+
+# Logs und Debugging
+logs/
+*.log
+
+# IDE- und Editor-spezifische Dateien
+.vscode/
+.idea/
+*.iml
+
+# Datenbank- und Cache-Dateien
+*.sqlite3
+*.db
+
+# Node.js (falls Frontend vorhanden)
+node_modules/
+package-lock.json
+yarn.lock
+
+# FastAPI / Uvicorn
+instance/
+*.pid
+
+# JWT Keys oder Secrets
+jwt_secret.key
