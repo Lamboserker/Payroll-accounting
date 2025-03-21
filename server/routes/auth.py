@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from dotenv import load_dotenv
+from bson import ObjectId
 
 load_dotenv()
 
@@ -63,14 +64,15 @@ def get_users(token: str):
     current_user = get_current_user(token)
     if current_user.get("role") not in ["admin", "root"]:
         raise HTTPException(status_code=403, detail="Nicht autorisiert!")
-    return list(user_collection.find({}, {"password": 0}))
+    users = list(user_collection.find({}, {"password": 0}))
+    return users
 
 @router.get("/users/{user_id}")
 def get_user(user_id: str, token: str):
     current_user = get_current_user(token)
     if current_user.get("role") not in ["admin", "root"]:
         raise HTTPException(status_code=403, detail="Nicht autorisiert!")
-    user = user_collection.find_one({"_id": user_id}, {"password": 0})
+    user = user_collection.find_one({"_id": ObjectId(user_id)}, {"password": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
     return user
@@ -78,7 +80,9 @@ def get_user(user_id: str, token: str):
 @router.put("/profile")
 def update_profile(user: User, token: str):
     current_user = get_current_user(token)
-    update_data = {k: v for k, v in user.dict().items() if v is not None}
+    update_data = user.dict(exclude_unset=True)
+    if "password" in update_data:
+        update_data["password"] = get_password_hash(update_data["password"])
     user_collection.update_one({"email": current_user["email"]}, {"$set": update_data})
     return {"message": "Profil erfolgreich aktualisiert"}
 
@@ -122,3 +126,5 @@ def login(user: User):
         raise HTTPException(status_code=500, detail=f"Datenbankfehler: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unbekannter Fehler: {str(e)}")
+
+print(f"🔍 DEBUG: SECRET_KEY = {repr(SECRET_KEY)}")
