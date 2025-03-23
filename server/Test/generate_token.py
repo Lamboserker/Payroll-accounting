@@ -33,6 +33,7 @@ def decode_access_token(token: str):
 # ✅ Erstelle den Token für den Benutzer
 user_data = {
     "sub": "lukaslamberz96@gmail.com",
+    "password": "123456789",
     "role": "user"
 }
 

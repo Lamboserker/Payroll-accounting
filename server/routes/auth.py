@@ -57,7 +57,12 @@ def get_current_user(token: str):
 
 @router.get("/auth/me")
 def get_me(token: str):
-    return get_current_user(token)
+    user = get_current_user(token)
+    return {
+        "email": user["email"],
+        "full_name": user.get("full_name", "Unbekannt"),
+        "role": user["role"]
+    }
 
 @router.get("/users")
 def get_users(token: str):
@@ -91,7 +96,7 @@ def register(user: User, token: str = None):
     try:
         if user_collection.find_one({"email": user.email}):
             raise HTTPException(status_code=400, detail="E-Mail bereits registriert")
-        
+
         if user.role in ["admin", "root"]:
             if not token:
                 raise HTTPException(status_code=403, detail="Nur Admins oder Root können Admins erstellen")
@@ -99,12 +104,13 @@ def register(user: User, token: str = None):
             current_user = get_current_user(token)
             if current_user.get("role") != "root":
                 raise HTTPException(status_code=403, detail="Nicht autorisiert! Nur Root kann Admins erstellen")
-        
+
         hashed_password = get_password_hash(user.password)
         user_dict = user.dict()
         user_dict["password"] = hashed_password
+        
         user_collection.insert_one(user_dict)
-        return {"message": f"Benutzer {user.email} wurde erfolgreich erstellt", "role": user.role}
+        return {"message": f"Benutzer {user.full_name} wurde erfolgreich erstellt", "role": user.role}
     except errors.PyMongoError as e:
         raise HTTPException(status_code=500, detail=f"Datenbankfehler: {str(e)}")
     except Exception as e:
