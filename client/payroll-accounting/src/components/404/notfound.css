@@ -1,0 +1,30 @@
+.not-found-img {
+    width: 500px;
+    animation: bounce 3s ease-in-out infinite;
+}
+
+.not-found-img:hover {
+    cursor: url('../../direct-selection.cur'), auto;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-10px);
+    }
+
+    50% {
+        transform: translateY(0);
+    }
+
+    75% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}

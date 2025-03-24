@@ -1,5 +1,6 @@
 import os
 from pymongo import MongoClient, errors
+from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException, Depends
 from pymongo.collection import Collection	
 from config import db
@@ -116,13 +117,19 @@ def register(user: User, token: str = None):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unbekannter Fehler: {str(e)}")
 
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
 @router.post("/login")
-def login(user: User):
+def login(user: LoginRequest):
     try:
         db_user = user_collection.find_one({"email": user.email})
         if not db_user or not verify_password(user.password, db_user["password"]):
             raise HTTPException(status_code=401, detail="Ungültige Anmeldeinformationen")
-        
+
         access_token = create_access_token(
             data={"sub": db_user["email"], "role": db_user["role"]},
             expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -132,5 +139,3 @@ def login(user: User):
         raise HTTPException(status_code=500, detail=f"Datenbankfehler: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unbekannter Fehler: {str(e)}")
-
-print(f"🔍 DEBUG: SECRET_KEY = {repr(SECRET_KEY)}")
