@@ -31,7 +31,7 @@ export default function Register() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-schutzschild">
             <div className="bg-white p-8 rounded shadow-lg w-80">
                 <h2 className="text-2xl font-semibold mb-6">Registrieren</h2>
                 <form onSubmit={handleSubmit}>

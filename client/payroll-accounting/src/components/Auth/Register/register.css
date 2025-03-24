@@ -1,0 +1,6 @@
+.bg-schutzschild {
+    background-image: url('../../../assets/Slogo.jpg');
+    height: 100vh;
+    display: flex;
+    position: relative;
+}
