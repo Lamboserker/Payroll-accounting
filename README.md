@@ -7,25 +7,26 @@ The Payroll Accounting System is a comprehensive solution designed to manage and
 ## Features
 - **Employee Management:** Add, update, and delete employee records.
 - **Payroll Calculation:** Automatic calculation of employee salaries, taxes, deductions, and bonuses.
-- **Tax Compliance:** Tax tables for various regions, ensuring up-to-date compliance.
-- **Report Generation:** Generate detailed payroll reports for management and tax purposes.
-- **Secure Data Storage:** All employee and payroll data are securely stored.
+- **Tax Compliance:** Tax tables for various regions to ensure up-to-date compliance.
+- **User Management:** Admins and roots can create users, update profiles, and manage roles.
+- **JWT Authentication:** Secure login and token-based authentication.
+- **PDF Document Management:** Watches for incoming PDF files and processes them.
 
 ## Tech Stack
+- **Backend:** FastAPI (Python)
 - **Frontend:** React.js, Tailwind CSS
-- **Backend:** Node.js, Express
 - **Database:** MongoDB
-- **Authentication:** JWT-based authentication
-
-## Installation
-
-### Clone the repository
-```bash
-git clone https://github.com/Lamboserker/Payroll-accounting.git
-```
+- **Authentication:** JWT (JSON Web Tokens)
+- **PDF Watcher:** Python script for handling incoming PDF files
 
 ### Install dependencies
 Navigate to the project directory and install the dependencies.
+
+For the backend:
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
 For the frontend:
 ```bash
@@ -33,26 +34,19 @@ cd frontend
 npm install
 ```
 
-For the backend:
-```bash
-cd backend
-npm install
-```
-
 ### Set up environment variables
-Create a `.env` file in the root directory for sensitive data like API keys, database URIs, etc.
+Create a `.env` file in the backend root directory with the following variables:
 
-Example:
-```
+```plaintext
 DB_URI=mongodb://localhost:27017/payroll
-JWT_SECRET=your-secret-key
+JWT_SECRET_KEY=your-secret-key
 ```
 
 ### Run the project
 To start the backend:
 ```bash
 cd backend
-npm start
+uvicorn main:app --reload
 ```
 
 To start the frontend:
@@ -60,6 +54,25 @@ To start the frontend:
 cd frontend
 npm start
 ```
+
+## API Endpoints
+
+### Auth Routes
+- **POST /auth/login**: Logs in and returns a JWT token.
+- **POST /auth/register**: Registers a new user (admin or root required for creating admin roles).
+- **GET /auth/me**: Returns the current authenticated user's data.
+
+### User Routes (Protected)
+- **GET /protected/users**: Returns all users (only accessible by admin and root).
+- **GET /protected/users/{user_id}**: Retrieves user information by user ID.
+- **PUT /protected/profile**: Allows a user to update their profile.
+
+### PDF Routes
+- **POST /pdf/upload**: Uploads a PDF for processing.
+- **GET /pdf/status**: Returns the current status of the PDF watcher.
+
+## Running PDF Watcher
+The backend runs a `pdf_watcher.py` script in the background to handle and process PDF documents.
 
 ## Usage
 - **Login:** Use the login page to authenticate with your credentials.
