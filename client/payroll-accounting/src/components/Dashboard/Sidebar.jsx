@@ -102,7 +102,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
             <div className="mb-4">
                 <h3 className="text-lg mb-2">Zeitraum wählen</h3>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-                    <div className="flex flex-col gap-8 mb-4">
+                    <div className="flex flex-col gap-4 mb-4">
                         {/* Start Date Picker */}
                         <DatePicker
                             label="Startdatum"
@@ -111,19 +111,31 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
                             slots={{ openPickerIcon: FcStart }}
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    backgroundColor: "white", // Statische Hintergrundfarbe
-                                    color: "black", // Schwarzer Text
+                                    backgroundColor: "#222", // Dunkler Hintergrund
+                                    color: "white",
                                 },
                                 "& .MuiFormLabel-root": {
-                                    color: "black", // Statische Label-Farbe
-                                    "&:hover": {
-                                        color: "black", // Keine Farbänderung beim Hover
+                                    color: "white",
+                                    mixBlendMode: "difference", // Sorgt für automatische Anpassung
+                                    "&.Mui-focused": {
+                                        color: "white",
                                     },
-
+                                },
+                            }}
+                            slotProps={{
+                                textField: {
+                                    InputProps: {
+                                        sx: {
+                                            color: "white",
+                                            backgroundColor: "#222",
+                                            "& input": {
+                                                color: "white",
+                                            },
+                                        },
+                                    },
                                 },
                             }}
                         />
-
 
                         {/* End Date Picker */}
                         <DatePicker
@@ -133,29 +145,38 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
                             slots={{ openPickerIcon: GiFinishLine }}
                             sx={{
                                 "& .MuiInputBase-root": {
-                                    backgroundColor: "white",
-                                    color: "black",
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                                        border: "none",
-                                    },
+                                    backgroundColor: "#222", // Dunkler Hintergrund
+                                    color: "white",
                                 },
                                 "& .MuiFormLabel-root": {
-                                    color: "black",
-                                    "&:hover": {
-                                        color: "black",
+                                    color: "white",
+                                    mixBlendMode: "difference",
+                                    "&.Mui-focused": {
+                                        color: "white",
                                     },
                                 },
                                 "& .MuiSvgIcon-root": {
-                                    color: "gray",
-                                    "&:hover": {
-                                        color: "gray",
+                                    color: "white", // Weißes Icon
+                                },
+                            }}
+                            slotProps={{
+                                textField: {
+                                    InputProps: {
+                                        sx: {
+                                            color: "white",
+                                            backgroundColor: "#222",
+                                            "& input": {
+                                                color: "white",
+                                            },
+                                        },
                                     },
+                                },
+                                // Hier setzen wir die Farbe des Icons explizit
+                                openPickerIcon: {
+                                    color: "white",
                                 },
                             }}
                         />
-
                     </div>
                 </LocalizationProvider>
             </div>
