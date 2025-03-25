@@ -24,13 +24,13 @@ Navigate to the project directory and install the dependencies.
 
 For the backend:
 ```bash
-cd backend
+cd server
 pip install -r requirements.txt
 ```
 
 For the frontend:
 ```bash
-cd frontend
+cd client
 npm install
 ```
 
@@ -45,14 +45,14 @@ JWT_SECRET_KEY=your-secret-key
 ### Run the project
 To start the backend:
 ```bash
-cd backend
+cd server
 uvicorn main:app --reload
 ```
 
 To start the frontend:
 ```bash
-cd frontend
-npm start
+cd client
+npm run dev
 ```
 
 ## API Endpoints
