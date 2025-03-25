@@ -4,9 +4,12 @@ import Register from "./components/Auth/Register/Register";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Upload from "./components/Dashboard/Upload";
 import NotFound from "./components/404/NotFound";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 function App() {
   return (
     <div>
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -16,6 +19,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      {/* </LocalizationProvider> */}
     </div>
   );
 }

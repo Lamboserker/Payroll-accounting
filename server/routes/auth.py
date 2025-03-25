@@ -1,7 +1,7 @@
 import os
 from pymongo import MongoClient, errors
 from pydantic import BaseModel
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from pymongo.collection import Collection	
 from config import db
 from models import User
@@ -56,9 +56,15 @@ def get_current_user(token: str):
     except errors.PyMongoError as e:
         raise HTTPException(status_code=500, detail=f"Datenbankfehler: {str(e)}")
 
-@router.get("/auth/me")
-def get_me(token: str):
-    user = get_current_user(token)
+@router.get("/me")
+def get_me(request: Request):
+    token = request.headers.get("Authorization")
+    if not token or not token.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token fehlt oder ist ungültig")
+    
+    token = token.split("Bearer ")[1]  # Entfernt "Bearer " und gibt den eigentlichen Token weiter
+    user = get_current_user(token)  # Hier sollte die JWT-Verarbeitung erfolgen
+
     return {
         "email": user["email"],
         "full_name": user.get("full_name", "Unbekannt"),

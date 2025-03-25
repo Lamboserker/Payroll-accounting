@@ -1,64 +1,191 @@
-// Sidebar.jsx
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { CiLogout } from "react-icons/ci";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import "dayjs/locale/de"; // Deutsche Lokalisierung für dayjs
+import { InputAdornment, TextField } from "@mui/material";
+import { FcStart } from "react-icons/fc";
+import { GiFinishLine } from "react-icons/gi";
+import { AiOutlineCalendar } from "react-icons/ai";
 
-export default function Sidebar({ setSelectedFile }) {
+export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
+    const [user, setUser] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [error, setError] = useState("");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const navigate = useNavigate();
+
+    // Maximalbreite der Sidebar
+    const MAX_SIDEBAR_WIDTH = 400;
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/login");
-        } else {
-            fetch("http://localhost:8000/protected/documents", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    setDocuments(data);
-                })
-                .catch((err) => {
-                    setError("Fehler beim Laden der Dokumente");
-                });
+            return;
         }
-    }, [navigate]);
 
-    const handleFileSelect = (file) => {
-        setSelectedFile(file); // Aktualisiert die ausgewählte Datei
-    };
+        let isMounted = true;
+
+        fetch("http://localhost:8000/auth/me", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (isMounted) {
+                    setUser(data);
+                }
+            })
+            .catch(() => {
+                if (isMounted) {
+                    setError("Fehler beim Laden des Benutzers");
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         navigate("/login");
     };
 
+    const handleMouseDown = (e) => {
+        document.body.style.userSelect = "none";
+
+        const startX = e.clientX;
+        const startWidth = sidebarWidth;
+
+        const handleMouseMove = (moveEvent) => {
+            const diff = moveEvent.clientX - startX;
+            setSidebarWidth(Math.min(Math.max(200, startWidth + diff), MAX_SIDEBAR_WIDTH));
+        };
+
+        const handleMouseUp = () => {
+            document.body.style.userSelect = "";
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+    };
+
     return (
-        <div className="min-h-screen bg-gray-800 text-white w-64 p-4">
-            <h2 className="text-xl font-semibold mb-4">Sidebar</h2>
-            <button
+        <div
+            id="sidebar"
+            className="min-h-screen bg-gray-800 text-white p-4 fixed top-0 left-0 h-full overflow-y-auto z-10"
+            style={{ width: `${sidebarWidth}px` }}
+        >
+            {/* Sidebar Content */}
+            <div className="flex items-center space-x-3 mb-4">
+                <img
+                    src="https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
+                    alt="Avatar"
+                    className="w-10 h-10 rounded-full"
+                />
+                <span className="text-lg font-semibold">
+                    {user ? user.full_name : "Lädt..."}
+                </span>
+            </div>
+
+            {/* Date Range Pickers */}
+            <div className="mb-4">
+                <h3 className="text-lg mb-2">Zeitraum wählen</h3>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+                    <div className="flex flex-col gap-8 mb-4">
+                        {/* Start Date Picker */}
+                        <DatePicker
+                            label="Startdatum"
+                            value={startDate}
+                            onChange={(newValue) => setStartDate(newValue)}
+                            slots={{ openPickerIcon: FcStart }}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    backgroundColor: "white", // Statische Hintergrundfarbe
+                                    color: "black", // Schwarzer Text
+                                },
+                                "& .MuiFormLabel-root": {
+                                    color: "black", // Statische Label-Farbe
+                                    "&:hover": {
+                                        color: "black", // Keine Farbänderung beim Hover
+                                    },
+
+                                },
+                            }}
+                        />
+
+
+                        {/* End Date Picker */}
+                        <DatePicker
+                            label="Enddatum"
+                            value={endDate}
+                            onChange={(newValue) => setEndDate(newValue)}
+                            slots={{ openPickerIcon: GiFinishLine }}
+                            sx={{
+                                "& .MuiInputBase-root": {
+                                    backgroundColor: "white",
+                                    color: "black",
+                                },
+                                "& .MuiOutlinedInput-root": {
+                                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                                        border: "none",
+                                    },
+                                },
+                                "& .MuiFormLabel-root": {
+                                    color: "black",
+                                    "&:hover": {
+                                        color: "black",
+                                    },
+                                },
+                                "& .MuiSvgIcon-root": {
+                                    color: "gray",
+                                    "&:hover": {
+                                        color: "gray",
+                                    },
+                                },
+                            }}
+                        />
+
+                    </div>
+                </LocalizationProvider>
+            </div>
+
+            {/* Dokumentenliste */}
+            <div className="overflow-auto flex-1">
+                <h3 className="text-lg mb-2">Dokumente</h3>
+                {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+                <ul>
+                    {documents.map((doc) => (
+                        <li key={doc._id} className="cursor-pointer p-2  rounded mb-2">
+                            {doc.title}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            {/* Resizable handle */}
+            <div
+                onMouseDown={handleMouseDown}
+                className="absolute top-0 right-0 h-full w-2 bg-gray-600 cursor-ew-resize"
+            />
+
+            {/* Logout-Icon */}
+            <div
                 onClick={handleLogout}
-                className="w-full p-2 bg-red-500 rounded mb-4"
+                className="absolute bottom-4 right-4 p-3 bg-gray-700 rounded-full cursor-pointer hover:bg-red-500"
             >
-                Logout
-            </button>
-            <h3 className="text-lg mb-2">Dokumente</h3>
-            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-            <ul>
-                {documents.map((doc) => (
-                    <li
-                        key={doc._id}
-                        onClick={() => handleFileSelect(doc)}
-                        className="cursor-pointer p-2 hover:bg-gray-600 rounded mb-2"
-                    >
-                        {doc.title}
-                    </li>
-                ))}
-            </ul>
+                <CiLogout size={30} className="text-white" />
+            </div>
         </div>
     );
 }
