@@ -83,7 +83,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
     return (
         <div
             id="sidebar"
-            className="min-h-screen bg-gray-800 text-white p-4 fixed top-0 left-0 h-full overflow-y-auto z-10"
+            className="min-h-screen bg-gray-800 text-white p-4 fixed top-0 left-0 h-full overflow-y-auto z-40"
             style={{ width: `${sidebarWidth}px` }}
         >
             {/* Sidebar Content */}
@@ -197,7 +197,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
             {/* Resizable handle */}
             <div
                 onMouseDown={handleMouseDown}
-                className="absolute top-0 right-0 h-full w-2 bg-gray-600 cursor-ew-resize"
+                className="absolute top-0 right-0 h-full w-2 bg-gray-600 cursor-ew-resize z-50"
             />
 
             {/* Logout-Icon */}

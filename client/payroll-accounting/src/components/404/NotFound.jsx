@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import NotFoundImage from "../../assets/2526919.png"; // Stelle sicher, dass das Bild im richtigen Ordner liegt
 import "./notfound.css"; // Importiere die CSS-Datei
-import cursorImage from "../../assets/cursor.png"; // Stelle sicher, dass das Bild im richtigen Ordner liegt
+// import cursorImage from "../../assets/cursor.png"; // Stelle sicher, dass das Bild im richtigen Ordner liegt
 
 const NotFound = () => {
     const navigate = useNavigate();

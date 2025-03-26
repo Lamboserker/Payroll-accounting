@@ -3,9 +3,6 @@
     animation: bounce 3s ease-in-out infinite;
 }
 
-.not-found-img:hover {
-    cursor: url('../../direct-selection.cur'), auto;
-}
 
 @keyframes bounce {
     0% {
