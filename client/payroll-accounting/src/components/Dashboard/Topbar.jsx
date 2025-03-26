@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { HiBars3 } from "react-icons/hi2";
 import { CiBellOn } from "react-icons/ci";
 import { FaXmark } from "react-icons/fa6";
@@ -15,6 +16,45 @@ function classNames(...classes) {
 }
 
 export default function Topbar() {
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
+        let isMounted = true;
+
+        fetch("http://localhost:8000/auth/me", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (isMounted) {
+                    setUser(data);
+                }
+            })
+            .catch(() => {
+                if (isMounted) {
+                    setError("Fehler beim Laden des Benutzers");
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [navigate]);
+
+
+
+
+
     return (
         <Disclosure as="nav" className="bg-gray-800 ">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 z-50">
@@ -66,9 +106,9 @@ export default function Topbar() {
                                     <span className="absolute -inset-1.5" />
                                     <span className="sr-only">Open user menu</span>
                                     <img
-                                        alt=""
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        className="size-8 rounded-full"
+                                        src="https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
+                                        alt="Avatar"
+                                        className="w-10 h-10 rounded-full"
                                     />
                                 </MenuButton>
                             </div>

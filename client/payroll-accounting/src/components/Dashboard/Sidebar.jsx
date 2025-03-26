@@ -105,6 +105,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
                     <div className="flex flex-col gap-4 mb-4">
                         {/* Start Date Picker */}
                         <DatePicker
+                            views={['year', 'month', 'day']}
                             label="Startdatum"
                             value={startDate}
                             onChange={(newValue) => setStartDate(newValue)}
@@ -139,6 +140,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
 
                         {/* End Date Picker */}
                         <DatePicker
+                            views={['year', 'month', 'day']}
                             label="Enddatum"
                             value={endDate}
                             onChange={(newValue) => setEndDate(newValue)}
