@@ -3,17 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { products } from "./data";
 import ErrorBoundary from "../../../../payroll-accounting/Error-Boundary/SidebarBoundary";
-import Topbar from "./Topbar";
+import Topbar from "./TopBar";
 
 export default function Dashboard() {
     const [sidebarWidth, setSidebarWidth] = useState(256);
 
     return (
         <>
-            {/* Topbar - always on top */}
-            <div className="fixed top-0 left-0 w-full z-50">
-                <Topbar />
-            </div>
+
             <div className="flex min-h-screen bg-schutzschild pt-16">
                 {/* Sidebar */}
                 <ErrorBoundary>

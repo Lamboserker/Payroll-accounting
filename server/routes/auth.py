@@ -62,8 +62,8 @@ def get_me(request: Request):
     if not token or not token.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Token fehlt oder ist ungültig")
     
-    token = token.split("Bearer ")[1]  # Entfernt "Bearer " und gibt den eigentlichen Token weiter
-    user = get_current_user(token)  # Hier sollte die JWT-Verarbeitung erfolgen
+    token = token.split("Bearer ")[1]  
+    user = get_current_user(token)  
 
     return {
         "email": user["email"],
