@@ -4,12 +4,10 @@ import { CiLogout } from "react-icons/ci";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 import "dayjs/locale/de"; // Deutsche Lokalisierung für dayjs
-import { InputAdornment, TextField } from "@mui/material";
 import { FcStart } from "react-icons/fc";
 import { GiFinishLine } from "react-icons/gi";
-import { AiOutlineCalendar } from "react-icons/ai";
+
 
 export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
     const [user, setUser] = useState(null);

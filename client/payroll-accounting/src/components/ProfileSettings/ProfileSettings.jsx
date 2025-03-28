@@ -75,7 +75,7 @@ const ProfileSettings = () => {
                     {editMode ? (
                         <>
                             <TextField
-                                label="Full Name"
+                                label="Vollständiger Name"
                                 type="text"
                                 variant="outlined"
                                 fullWidth
