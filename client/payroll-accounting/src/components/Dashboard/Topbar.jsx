@@ -19,9 +19,12 @@ export default function Topbar() {
     const [user, setUser] = useState(null);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (!token) {
+        const allowedRoutes = ["/register"]; // Routen, die ohne Token erlaubt sind
+
+        if (!token && !allowedRoutes.includes(window.location.pathname)) {
             navigate("/login");
             return;
         }
@@ -50,6 +53,7 @@ export default function Topbar() {
             isMounted = false;
         };
     }, [navigate]);
+
 
 
 

@@ -6,4 +6,9 @@ python-dotenv
 passlib
 python-jose
 typing-extensions
-bcrxypt==4.0.1
+bcrypt==4.0.1
+watchdog
+PyMuPDF==1.21.2
+pydantic[email]
+spacy
+joblib

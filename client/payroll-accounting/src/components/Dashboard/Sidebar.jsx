@@ -11,7 +11,7 @@ import { GiFinishLine } from "react-icons/gi";
 
 export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
     const [user, setUser] = useState(null);
-    const [documents, setDocuments] = useState([]);
+    // const [documents, setDocuments] = useState([]);
     const [error, setError] = useState("");
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -20,7 +20,9 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
     // Maximalbreite der Sidebar
     const MAX_SIDEBAR_WIDTH = 400;
 
+
     useEffect(() => {
+        console.log("Start- und Enddatum in Sidebar:", startDate, endDate);
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/login");
@@ -39,6 +41,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
             .then((data) => {
                 if (isMounted) {
                     setUser(data);
+                    console.log("Benutzer geladen:", data);
                 }
             })
             .catch(() => {
@@ -51,6 +54,13 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
             isMounted = false;
         };
     }, [navigate]);
+
+    // Date Range Change Handler
+    const handleDateChange = (newStartDate, newEndDate) => {
+        console.log("Start- und Enddatum geändert:", newStartDate, newEndDate);
+        setStartDate(newStartDate);
+        setEndDate(newEndDate);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -141,7 +151,7 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
                             views={['year', 'month', 'day']}
                             label="Enddatum"
                             value={endDate}
-                            onChange={(newValue) => setEndDate(newValue)}
+                            onChange={(newValue) => handleDateChange(newValue, endDate)}
                             slots={{ openPickerIcon: GiFinishLine }}
                             sx={{
                                 "& .MuiInputBase-root": {
@@ -184,14 +194,16 @@ export default function Sidebar({ sidebarWidth, setSidebarWidth }) {
             {/* Dokumentenliste */}
             <div className="overflow-auto flex-1">
                 <h3 className="text-lg mb-2">Dokumente</h3>
+                <p className="text-sm mb-2">Wählen Sie ein Dokument aus, um es anzuzeigen.</p>
+                <p className="text-sm mb-2">Aktuelle Auswahl: {startDate ? startDate.format("DD.MM.YYYY") : "Kein Startdatum"} - {endDate ? endDate.format("DD.MM.YYYY") : "Kein Enddatum"}</p>
                 {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-                <ul>
+                {/* <ul>
                     {documents.map((doc) => (
                         <li key={doc._id} className="cursor-pointer p-2  rounded mb-2">
                             {doc.title}
                         </li>
                     ))}
-                </ul>
+                </ul> */}
             </div>
 
             {/* Resizable handle */}

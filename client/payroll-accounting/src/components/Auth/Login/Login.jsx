@@ -77,6 +77,10 @@ export default function Login() {
     const navigate = useNavigate();
     const [error, setError] = useState("");
 
+    const handleRegisterRedirect = () => {
+        navigate("/register");
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -98,6 +102,8 @@ export default function Login() {
             setError("Fehler bei der Anmeldung");
         }
     };
+
+
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 bg-schutzschild">
@@ -165,9 +171,9 @@ export default function Login() {
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Noch kein Konto?{' '}
-                        <a href="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                            Registriere dich hier!
-                        </a>
+                        <button onClick={handleRegisterRedirect} className="font-semibold text-indigo-600 hover:text-indigo-500">
+                            Registriere dich
+                        </button>
                     </p>
                 </div>
             </div>

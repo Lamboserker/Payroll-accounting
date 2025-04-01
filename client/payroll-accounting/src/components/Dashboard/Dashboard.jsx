@@ -60,16 +60,33 @@ export default function Dashboard() {
 
     // Filter documents based on the date range
     useEffect(() => {
+        console.log("Start- und Enddatum in useEffect:", startDate, endDate);
+
         if (startDate && endDate) {
+            // Konvertiere Dayjs zu native Date-Objekten
+            const startDateObj = startDate.toDate();
+            const endDateObj = endDate.toDate();
+
+            console.log("Start- und Enddatum als Date-Objekte:", startDateObj, endDateObj);
+
             const filtered = documents.filter((doc) => {
                 const docDate = new Date(doc.createdAt);
-                return docDate >= startDate && docDate <= endDate;
+                console.log(`Vergleiche Dokument: ${doc.title}`);
+                console.log(`Dokumentdatum: ${docDate}`);
+                console.log(`Vergleich: ${docDate} >= ${startDateObj} && ${docDate} <= ${endDateObj}`);
+
+                return docDate >= startDateObj && docDate <= endDateObj;
             });
+
+            console.log("Gefilterte Dokumente:", filtered);
             setFilteredDocuments(filtered);
         } else {
-            setFilteredDocuments(documents); // No filter, show all documents
+            console.log("Kein Filter angewendet, alle Dokumente werden angezeigt.");
+            setFilteredDocuments(documents); // Kein Filter, alle Dokumente anzeigen
         }
-    }, [startDate, endDate, documents]);
+    }, [startDate, endDate, documents]); // Achte darauf, dass auch 'documents' als Abhängigkeit dabei ist
+
+
 
 
     return (
