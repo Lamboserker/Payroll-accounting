@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from routes import auth, pdf, protected
 import uvicorn
@@ -20,6 +21,14 @@ app.add_middleware(
 # Absoluten Pfad zur Datei ermitteln
 server_path = os.path.dirname(os.path.abspath(__file__))  
 pdf_watcher_path = os.path.join(server_path, "pdf_watcher.py")
+
+
+# Sicherstellen, dass der Ordner existiert
+pdf_dir = "server/eingehende_pdfs"
+os.makedirs(pdf_dir, exist_ok=True)
+
+# Den Ordner als statisches Verzeichnis einbinden
+app.mount("/pdfs", StaticFiles(directory=pdf_dir), name="pdfs")
 
 # Python-Interpreter ermitteln (falls virtuelle Umgebung aktiv ist, diese bevorzugen)
 python_path = sys.executable
