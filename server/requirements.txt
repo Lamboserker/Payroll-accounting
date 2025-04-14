@@ -8,7 +8,6 @@ python-jose
 typing-extensions
 bcrypt==4.0.1
 watchdog
-PyMuPDF==1.21.2
 pydantic[email]
 spacy
 joblib
